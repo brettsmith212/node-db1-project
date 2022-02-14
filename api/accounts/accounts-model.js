@@ -5,20 +5,29 @@ const getAll = () => {
 };
 
 const getById = (id) => {
-  // DO YOUR MAGIC
   return db("accounts").where({ id });
 };
 
-const create = (account) => {
-  // DO YOUR MAGIC
+const create = async (account) => {
+  let [id] = await db("accounts").insert(account);
+  return {
+    id,
+    account,
+  };
 };
 
-const updateById = (id, account) => {
-  // DO YOUR MAGIC
+const updateById = async (id, account) => {
+  await db("accounts").where(id).update(account);
+  return {
+    id,
+    account,
+  };
 };
 
-const deleteById = (id) => {
-  // DO YOUR MAGIC
+const deleteById = async (id) => {
+  let result = await getById(id);
+  await db("accounts").where(id).del();
+  return result;
 };
 
 module.exports = {
