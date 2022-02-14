@@ -36,7 +36,11 @@ router.post(
         name: name.trim(),
         budget: budget,
       });
-      res.status(201).json(postedAccount);
+      res.status(201).json({
+        id: postedAccount.id,
+        budget: postedAccount.account.budget,
+        name: postedAccount.account.name,
+      });
     } catch (e) {
       res.status(500).json({ message: "error adding account" });
     }
@@ -48,12 +52,15 @@ router.put("/:id", checkAccountId, checkAccountPayload, async (req, res) => {
   try {
     let { name, budget } = req.body;
     let { id } = req.params;
-    let postedAccount = await Accounts.updateById(id, {
+    let updatedAccount = await Accounts.updateById(id, {
       name: name.trim(),
       budget,
     });
-    console.log(postedAccount);
-    res.status(200).json(postedAccount);
+    res.status(200).json({
+      id: updatedAccount.id,
+      budget: updatedAccount.account.budget,
+      name: updatedAccount.account.name,
+    });
   } catch (e) {
     res.status(500).json({ message: "error adding account" });
   }
@@ -69,9 +76,9 @@ router.delete("/:id", checkAccountId, async (req, res) => {
   }
 });
 
-router.use((err, req, res, next) => {
-  // eslint-disable-line
-  // DO YOUR MAGIC
-});
+// router.use((err, req, res, next) => {
+//   // eslint-disable-line
+//   // DO YOUR MAGIC
+// });
 
 module.exports = router;
