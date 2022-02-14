@@ -1,9 +1,6 @@
 const Accounts = require("./accounts-model");
 
 exports.checkAccountPayload = (req, res, next) => {
-  // DO YOUR MAGIC
-  // Note: you can either write "manual" validation logic
-  // or use the Yup library (not currently installed)
   let { name, budget } = req.body;
   if (!name || !budget) {
     res.status(400).json({ message: "name and budget are required" });
@@ -27,7 +24,6 @@ exports.checkAccountPayload = (req, res, next) => {
 };
 
 exports.checkAccountNameUnique = async (req, res, next) => {
-  // DO YOUR MAGIC
   let { name } = req.body;
   let allAccounts = await Accounts.getAll();
   let duplicateAccts = allAccounts.filter((account) => account.name === name);
@@ -40,7 +36,6 @@ exports.checkAccountNameUnique = async (req, res, next) => {
 };
 
 exports.checkAccountId = async (req, res, next) => {
-  // DO YOUR MAGIC
   let { id } = req.params;
   let user = await Accounts.getById(id);
   if (user.length === 0) {
