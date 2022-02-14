@@ -10,13 +10,13 @@ exports.checkAccountPayload = (req, res, next) => {
       .status(400)
       .json({ message: "name of account must be between 3 and 100" });
     return;
-  } else if (!+budget) {
+  } else if (typeof budget !== "number") {
     res.status(400).json({ message: "budget of account must be a number" });
     return;
   } else if (budget < 0 || budget > 1000000) {
     res
       .status(400)
-      .json({ message: "budget of accoutn is to large or too small" });
+      .json({ message: "budget of account is too large or too small" });
     return;
   }
 

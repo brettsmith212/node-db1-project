@@ -17,7 +17,7 @@ router.get("/", async (req, res, next) => {
 
 router.get("/:id", checkAccountId, async (req, res) => {
   try {
-    let user = req.user;
+    let [user] = req.user;
     res.status(200).json(user);
   } catch (e) {
     res.status(500).json({ message: "error getting account" });
@@ -34,7 +34,7 @@ router.post(
       let { name, budget } = req.body;
       let postedAccount = await Accounts.create({
         name: name.trim(),
-        budget: +budget,
+        budget: budget,
       });
       res.status(201).json(postedAccount);
     } catch (e) {
@@ -43,29 +43,30 @@ router.post(
   }
 );
 
-router.put(
-  "/:id",
-  checkAccountId,
-  checkAccountNameUnique,
-  checkAccountPayload,
-  async (req, res) => {
-    // DO YOUR MAGIC
-    try {
-      let { name, budget } = req.body;
-      let { id } = req.params;
-      let postedAccount = await Accounts.updateById(id, {
-        name: name.trim(),
-        budget,
-      });
-      res.status(201).json(postedAccount);
-    } catch (e) {
-      res.status(500).json({ message: "error adding account" });
-    }
-  }
-);
-
-router.delete("/:id", (req, res, next) => {
+router.put("/:id", checkAccountId, checkAccountPayload, async (req, res) => {
   // DO YOUR MAGIC
+  try {
+    let { name, budget } = req.body;
+    let { id } = req.params;
+    let postedAccount = await Accounts.updateById(id, {
+      name: name.trim(),
+      budget,
+    });
+    console.log(postedAccount);
+    res.status(200).json(postedAccount);
+  } catch (e) {
+    res.status(500).json({ message: "error adding account" });
+  }
+});
+
+router.delete("/:id", checkAccountId, async (req, res) => {
+  try {
+    let { id } = req.params;
+    let removedAccount = await Accounts.deleteById(id);
+    res.status(200).json(removedAccount);
+  } catch (e) {
+    res.status(500).json({ message: "error deleting account" });
+  }
 });
 
 router.use((err, req, res, next) => {
